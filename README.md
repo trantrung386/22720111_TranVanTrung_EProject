@@ -1,22 +1,21 @@
-# Hướng dẫn thao tác hệ thống
 
 ## 1. Đăng ký (Register)
-![Register](./image/register1.png)
+![Register](./image/register.png)
 
 ## 2. Đăng nhập (Login)
-![Login](./image/login1.png)
+![Login](./image/login.png)
 
 ## 3. Dashboard
-![Dashboard](./image/dashboard1.png)
+![Dashboard](./image/dashboard.png)
 
 ## 4. Tạo sản phẩm (Create)
-![Create](./image/create1.png)
+![Create](./image/addProduct.png)
 
 ## 5. Lấy sản phẩm (Get Product)
-![Get Product](./image/getproduct.png)
+![Get Product](./image/getProducts.png)
 
 ## 6. Mua sản phẩm (Buy)
-![Buy](./image/buy.png)
+![Buy](./image/buyProducts.png)
 
 ## 7. Đơn hàng (Order)
-![Order](./image/order1.png)
+![Order](./image/getOrders.png)
