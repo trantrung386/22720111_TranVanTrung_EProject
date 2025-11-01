@@ -60,6 +60,11 @@ jobs:
               (cd $d && npm test --silent)
             fi
           done
+      - name: Ensure bcryptjs installed for auth
+  run: |
+    cd auth
+    npm install bcryptjs
+
 
   build-and-push:
     needs: build-test
