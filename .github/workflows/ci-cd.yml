@@ -92,8 +92,8 @@ jobs:
       # 2️⃣ Debug secrets (để chắc chắn secrets có tồn tại)
       - name: Debug secrets (safe check)
         run: |
-          echo "Docker username set? ${{ secrets.DOCKERHUB_USERNAME != '' }}"
-          echo "Docker token set? ${{ secrets.DOCKERHUB_TOKEN != '' }}"
+          echo "Docker username set? ${{ secrets.DOCKER_USERNAME != '' }}"
+          echo "Docker token set? ${{ secrets.DOCKER_PASSWORD != '' }}"
 
       # 3️⃣ Login to Docker Hub
       - name: Login to Docker Hub
@@ -109,7 +109,7 @@ jobs:
           set -e
           for d in api-gateway auth product order; do
             if [ -f "$d/Dockerfile" ]; then
-              IMAGE_NAME="${{ secrets.DOCKERHUB_USERNAME }}/${d}:latest"
+              IMAGE_NAME="${{ secrets.DOCKER_USERNAME }}/${d}:latest"
               echo "🐳 Building and pushing $IMAGE_NAME ..."
               docker build -t "$IMAGE_NAME" "$d"
               docker push "$IMAGE_NAME"
