@@ -39,12 +39,16 @@ jobs:
               (cd $d && npm install)
             fi
           done
+
       - name: Debug installed modules for auth
         run: |
           cd auth
           npm list --depth=0 || true
 
-
+      - name: Ensure bcryptjs installed for auth
+        run: |
+          cd auth
+          npm install bcryptjs
 
       - name: Run tests for services that have tests
         env:
@@ -60,11 +64,6 @@ jobs:
               (cd $d && npm test --silent)
             fi
           done
-      - name: Ensure bcryptjs installed for auth
-  run: |
-    cd auth
-    npm install bcryptjs
-
 
   build-and-push:
     needs: build-test
