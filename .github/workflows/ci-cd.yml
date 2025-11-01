@@ -22,17 +22,17 @@ jobs:
           --health-retries 5
 
     steps:
-      # 1️⃣ Clone mã nguồn
+      # 1️⃣ Checkout source code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Cài Node.js
+      # 2️⃣ Setup Node.js
       - name: Use Node.js 18
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      # 3️⃣ Cài dependencies cho tất cả service
+      # 3️⃣ Install dependencies for all services
       - name: Install dependencies for all services
         run: |
           set -e
@@ -43,13 +43,13 @@ jobs:
             fi
           done
 
-      # 4️⃣ Debug để chắc chắn bcryptjs, mocha, chai, chai-http đã có
+      # 4️⃣ Debug to verify installed modules
       - name: Debug installed modules for auth
         run: |
           cd auth
           npm list --depth=0 || true
 
-      # 5️⃣ Chạy test cho AUTH (API + logic)
+      # 5️⃣ Run Auth tests
       - name: Run Auth tests
         env:
           MONGODB_AUTH_URI: mongodb://127.0.0.1:27017/auth_db
@@ -60,23 +60,23 @@ jobs:
           echo "Running tests for auth"
           cd auth
           npm test --silent
+          cd ..
 
-      # 6️⃣ Chạy test cho PRODUCT — có khởi động auth server nền để tránh ECONNREFUSED
+      # 6️⃣ Run Product tests (start Auth service first)
       - name: Run Product tests (with auth service)
         env:
+          MONGODB_AUTH_URI: mongodb://127.0.0.1:27017/auth_db
           MONGODB_PRODUCT_URI: mongodb://127.0.0.1:27017/product_db
           NODE_ENV: test
           JWT_SECRET: idontknow
         run: |
           set -e
           echo "Starting auth service in background..."
-          cd auth && npm start &
-
-          echo "Waiting 10 seconds for auth service to start..."
+          cd auth
+          MONGODB_AUTH_URI=mongodb://127.0.0.1:27017/auth_db npm start &
           sleep 10
-
-          echo "Running product tests..."
           cd ../product
+          echo "Running product tests..."
           npm test --silent
 
   build-and-push:
@@ -85,18 +85,15 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-      # 1️⃣ Clone mã nguồn
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Đăng nhập Docker Hub
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # 3️⃣ Build & push image cho từng service
       - name: Build and push Docker images
         run: |
           set -e
