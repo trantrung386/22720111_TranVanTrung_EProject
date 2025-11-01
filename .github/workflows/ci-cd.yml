@@ -109,10 +109,11 @@ jobs:
           set -e
           for d in api-gateway auth product order; do
             if [ -f "$d/Dockerfile" ]; then
-              IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/$d:latest
+              IMAGE_NAME="${{ secrets.DOCKERHUB_USERNAME }}/${d}:latest"
               echo "🐳 Building and pushing $IMAGE_NAME ..."
-              docker build -t $IMAGE_NAME $d
-              docker push $IMAGE_NAME
+              docker build -t "$IMAGE_NAME" "$d"
+              docker push "$IMAGE_NAME"
               echo "✅ Successfully pushed $IMAGE_NAME"
             fi
           done
+
