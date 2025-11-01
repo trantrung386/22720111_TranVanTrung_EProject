@@ -36,9 +36,15 @@ jobs:
           for d in api-gateway auth product order; do
             if [ -f "$d/package.json" ]; then
               echo "Installing deps for $d"
-              (cd $d && npm ci || npm install)
+              (cd $d && npm install)
             fi
           done
+      - name: Debug installed modules for auth
+        run: |
+          cd auth
+          npm list --depth=0 || true
+
+
 
       - name: Run tests for services that have tests
         env:
