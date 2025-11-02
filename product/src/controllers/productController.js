@@ -126,10 +126,9 @@ class ProductController {
     catch (error) {
       console.error("Error in getProductById:", error);
       res.status(500).json({ message: "Server error" });
-  }
+    }
 
-
- }
+  }  
 }
  
   
