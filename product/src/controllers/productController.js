@@ -108,6 +108,24 @@ class ProductController {
       res.status(500).json({ message: "Server error" });
     }
   }
+  async getProductByID(req, res, next){
+    try{
+      const token = req.headfers.authorization;
+      if(!token){
+        return res.status(401).json({message :"unautho"});
+      }
+      const {id} = req.params;
+      const product = await Product.findById(id);
+      if(!product){
+        return res.status(404).json({messaga :"not found"});
+      }
+      res.status(200).json(product);
+    }catch(error){
+      console.error(error);
+      res.status(500).json({message :"erro"});
+    }
+  }
+  
 
 }
   
